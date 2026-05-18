@@ -110,6 +110,8 @@ id_est:number, cod:number, nota:number
 reprobado = {
 id_est:number, cod:number, nota:number
 
+1, 204, 2.9
+3, 205, 2.3
 2, 204, 2.9
 12, 206, 2.8
 }
@@ -167,3 +169,4 @@ cod:number, edificio:string, aula:string
 209, "BloqueF", "601"
 210, "BloqueA", "103"
 }
+
