@@ -296,6 +296,7 @@ estudiante ∪ egresado
 -- ρE1(estudiante) ⨝ E1.ciudad = E2.ciudad AND E1.id > E2.id ρE2(estudiante)
 
 -- 60. Encontrar estudiantes con mismo nombre de carrera y semestre.
+-- Le falta evitar el caso del mismo estudiante duplicado; usa una condición tipo E1.id > E2.id o E1.id != E2.id.
 -- ρE1(estudiante) ⨝ E1.semestre = E2.semestre AND E1.carrera = E2.carrera ρE2(estudiante)
 
 -- # Nivel 7 — Prerrequisitos
@@ -306,11 +307,13 @@ estudiante ∪ egresado
 -- (cursos) ⨝ P.requisito = curso.cod (curso)
 
 -- 62. Mostrar nombre del curso y nombre del requisito.
+-- La idea está bien; solo cuida el alias del segundo curso.
 -- cursos = ρC(curso) ⨝ C.cod = P.curso ρP(prerrequisito)
 -- preReq = (cursos) ⨝ P.requisito = curso.cod (curso)
 -- pi C.nombre, curso.nombre (preReq)
 
 -- 63. Mostrar estudiantes inscritos en cursos con prerrequisito.
+-- Sí funciona como idea general, pero sobra el segundo join con curso si ya usaste prerrequisito. Se puede simplificar
 -- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
 -- ((inscritos) ⨝ I.cod = P.curso ρP(prerrequisito)) ⨝ P.curso = C.cod ρC(curso)
 
@@ -319,11 +322,13 @@ estudiante ∪ egresado
 -- sigma C.nombre = 'IA' ((inscritos) ⨝ I.cod = C.cod ρC(curso))
 
 -- 65. Mostrar estudiantes inscritos en cursos cuyo requisito sea Programacion.
+-- Aquí filtraste por P.requisito = Programacion, pero lo que se pide es cursos cuyo prerrequisito sea Programacion; la condición está invertida.
 -- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
 -- filtro = (((inscritos) ⨝ I.cod = P.requisito ρP(prerrequisito)) ⨝ I.cod = C.cod ρC(curso))
 -- sigma C.nombre = 'Programacion' (filtro)
 
 -- 66. Mostrar cursos que requieren Calculo.
+-- Tu consulta devuelve cursos que son prerrequisito de Calculo, no cursos que requieren Calculo.
 -- pre = ρC(curso) ⨝ C.cod = P.requisito ρP(prerrequisito)
 -- sigma C.nombre = 'Calculo' (pre)
 
@@ -346,20 +351,18 @@ estudiante ∪ egresado
 -- # Nivel 8 — Razonamiento intermedio
 
 -- 71. Estudiantes que aprobaron algún curso.
+-- ρE(estudiante) ⨝ E.id = A.id_est ρA(aprobado)
 
-
-
--- 72. Estudiantes que reprobaron algún curso.
-
-
+-- 72. Estudiantes que reprobaron algún curso.-- 
+-- ρE(estudiante) ⨝ E.id = R.id_est ρR(reprobado)
 
 -- 73. Estudiantes que aprobaron y reprobaron.
-
-
+-- both = (ρA(aprobado) ⨝ A.id_est = R.id_est ρR(reprobado))
+-- pi E.nombre ((both) ⨝ A.id_est = E.id ρE(estudiante))
 
 -- 74. Estudiantes que aprobaron pero nunca reprobaron.
-
-
+-- soloAprobados = (pi id_est (aprobado)) - (pi id_est (reprobado))
+-- (soloAprobados) ⨝ id_est = E.id ρE(estudiante)
 
 -- 75. Estudiantes que tomaron más de un curso.
 
