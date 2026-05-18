@@ -284,8 +284,7 @@ estudiante ∪ egresado
 -- pi E1.nombre, E2.nombre (filtro)
 
 -- 56. Encontrar cursos que comparten mismo departamento.
-
-
+ρC1(curso) ⨝ C1.cod > C2.cod AND C1.departamento = C2.departamento ρC2(curso)
 
 -- 57. Encontrar profesores del mismo departamento.
 
