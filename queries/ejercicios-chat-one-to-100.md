@@ -284,75 +284,66 @@ estudiante ∪ egresado
 -- pi E1.nombre, E2.nombre (filtro)
 
 -- 56. Encontrar cursos que comparten mismo departamento.
-ρC1(curso) ⨝ C1.cod > C2.cod AND C1.departamento = C2.departamento ρC2(curso)
+-- ρC1(curso) ⨝ C1.cod > C2.cod AND C1.departamento = C2.departamento ρC2(curso)
 
 -- 57. Encontrar profesores del mismo departamento.
-
-
+-- ρP1(profesor) ⨝ P1.departamento = P2.departamento AND P1.id_prof > P2.id_prof ρP2(profesor)
 
 -- 58. Encontrar estudiantes del mismo semestre entre sí.
-
-
+-- ρE1(estudiante) ⨝ E1.semestre = E2.semestre AND E1.id > E2.id ρE2(estudiante)
 
 -- 59. Encontrar estudiantes de misma ciudad.
-
-
+-- ρE1(estudiante) ⨝ E1.ciudad = E2.ciudad AND E1.id > E2.id ρE2(estudiante)
 
 -- 60. Encontrar estudiantes con mismo nombre de carrera y semestre.
-
-
+-- ρE1(estudiante) ⨝ E1.semestre = E2.semestre AND E1.carrera = E2.carrera ρE2(estudiante)
 
 -- # Nivel 7 — Prerrequisitos
-
-
-
 -- Muy buenos para practicar joins complejos.
 
-
-
 -- 61. Mostrar curso y su prerrequisito.
-
-
+-- cursos = ρC(curso) ⨝ C.cod = P.curso ρP(prerrequisito)
+-- (cursos) ⨝ P.requisito = curso.cod (curso)
 
 -- 62. Mostrar nombre del curso y nombre del requisito.
-
-
+-- cursos = ρC(curso) ⨝ C.cod = P.curso ρP(prerrequisito)
+-- preReq = (cursos) ⨝ P.requisito = curso.cod (curso)
+-- pi C.nombre, curso.nombre (preReq)
 
 -- 63. Mostrar estudiantes inscritos en cursos con prerrequisito.
-
-
+-- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
+-- ((inscritos) ⨝ I.cod = P.curso ρP(prerrequisito)) ⨝ P.curso = C.cod ρC(curso)
 
 -- 64. Mostrar estudiantes inscritos en IA.
-
-
+-- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
+-- sigma C.nombre = 'IA' ((inscritos) ⨝ I.cod = C.cod ρC(curso))
 
 -- 65. Mostrar estudiantes inscritos en cursos cuyo requisito sea Programacion.
-
-
+-- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
+-- filtro = (((inscritos) ⨝ I.cod = P.requisito ρP(prerrequisito)) ⨝ I.cod = C.cod ρC(curso))
+-- sigma C.nombre = 'Programacion' (filtro)
 
 -- 66. Mostrar cursos que requieren Calculo.
-
-
+-- pre = ρC(curso) ⨝ C.cod = P.requisito ρP(prerrequisito)
+-- sigma C.nombre = 'Calculo' (pre)
 
 -- 67. Mostrar cursos con más de un prerrequisito.
-
-
+-- pre = ρC(curso) ⨝ C.cod = P.curso ρP(prerrequisito)
+-- ρP1(pre) ⨝ P1.cod = P2.cod AND P1.requisito != P2.requisito ρP2(pre)
 
 -- 68. Mostrar estudiantes inscritos en cursos avanzados.
-
-
+-- No hay cursos avanzados ... (al menos no existe esa categoría)
 
 -- 69. Mostrar estudiantes que cursan cursos sin prerrequisito.
-
-
+-- inscritos = ρE(estudiante) ⨝ E.id = I.id_est ρI(inscribe)
+-- noPre = (pi cod (curso)) - ((pi curso prerrequisito))
+-- (inscritos) ⨝ I.cod = curso.cod (noPre)
 
 -- 70. Mostrar prerrequisitos del curso IA.
-
-
+-- pre = (ρC(curso) ⨝ C.cod = P.curso ρP(prerrequisito))
+-- sigma C.nombre = 'IA' (pre)
 
 -- # Nivel 8 — Razonamiento intermedio
-
-
 
 -- 71. Estudiantes que aprobaron algún curso.
 
