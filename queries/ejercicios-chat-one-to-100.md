@@ -328,7 +328,6 @@ estudiante ∪ egresado
 -- sigma C.nombre = 'Programacion' (filtro)
 
 -- 66. Mostrar cursos que requieren Calculo.
--- Tu consulta devuelve cursos que son prerrequisito de Calculo, no cursos que requieren Calculo.
 -- pre = ρC(curso) ⨝ C.cod = P.requisito ρP(prerrequisito)
 -- sigma C.nombre = 'Calculo' (pre)
 
